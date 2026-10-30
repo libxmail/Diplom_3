@@ -7,7 +7,6 @@ from locators import TestLocators
 
 
 class BasePage:
-    @allure.step("Инициализация базовой страницы")
     def __init__(self, driver):
         self.driver = driver
         self.wait = WebDriverWait(self.driver, 10)
@@ -18,11 +17,6 @@ class BasePage:
             lambda driver: driver.execute_script(
                 "return document.readyState"
             ) == "complete"
-        )
-        self.wait.until(
-            EC.visibility_of_element_located(
-                TestLocators.HEADER_CONSTRUCTOR_BUTTON
-            )
         )
         self.wait.until(
             lambda driver: not any(
@@ -171,7 +165,7 @@ class BasePage:
     def wait_for_counter_increase(self, locator, initial_count):
         return self.wait.until(
             lambda driver: int(
-                driver.find_element(*locator).text
+                self.find_element_with_wait(locator).text
             ) > initial_count
         )
 
@@ -179,7 +173,7 @@ class BasePage:
     def wait_for_text_not_in(self, locator, excluded_values):
         return self.wait.until(
             lambda driver: (
-                driver.find_element(*locator).text.strip()
+                self.find_element_with_wait(locator).text.strip()
                 not in excluded_values
             )
         )
@@ -202,10 +196,9 @@ class BasePage:
                 for element in driver.find_elements(*locator)
             )
         )
-    
+
     @allure.step("Ожидание изменения URL страницы")
     def wait_for_url_to_differ(self, previous_url):
         return self.wait.until(
             lambda driver: driver.current_url != previous_url
         )
-    

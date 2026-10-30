@@ -3,7 +3,7 @@ import pytest
 from selenium import webdriver
 from data import URL
 from helpers import generate_email, generate_password
-from pages.base_page import BasePage
+from pages.constructor_page import ConstructorPage
 from pages.registration_page import RegistrationPage
 
 
@@ -22,15 +22,16 @@ def driver(request):
 
 
 @pytest.fixture
+def constructor_page(driver):
+    return ConstructorPage(driver).open()
+
+
+@pytest.fixture
 def create_user(driver):
-    base_page = BasePage(driver)
-    registration_page = RegistrationPage(driver)
+    registration_page = RegistrationPage(driver).open()
 
     email = generate_email()
     password = generate_password()
-
-    base_page.open_url(URL.REGISTER_URL)
-    base_page.wait_for_page_to_load()
 
     registration_page.register(
         "Sergei Fedotov",

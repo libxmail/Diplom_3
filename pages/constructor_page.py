@@ -1,10 +1,18 @@
 import allure
 
+from data import URL
 from pages.base_page import BasePage
 from locators import TestLocators
 
 
 class ConstructorPage(BasePage):
+
+    @allure.step("Открыть главную страницу конструктора")
+    def open(self):
+        self.open_url(URL.BASE_URL)
+        self.wait_for_page_to_load()
+        self.wait_for_element_visible(TestLocators.HEADER_CONSTRUCTOR_BUTTON)
+        return self
 
     @allure.step("Переход в ленту заказов")
     def click_order_feed_button(self):
@@ -36,7 +44,7 @@ class ConstructorPage(BasePage):
         self.wait_for_counter_increase(
             TestLocators.INGREDIENT_COUNTER,
             initial_count
-        )   
+        )
 
     @allure.step("Добавление ингредиента в заказ")
     def add_ingredient_to_order(self):

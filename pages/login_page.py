@@ -1,10 +1,18 @@
 import allure
 
+from data import URL
 from pages.base_page import BasePage
 from locators import TestLocators
 
 
 class LoginPage(BasePage):
+
+    @allure.step("Открыть страницу входа")
+    def open(self):
+        self.open_url(URL.LOGIN_URL)
+        self.wait_for_page_to_load()
+        self.wait_for_element_visible(TestLocators.LOGIN_BUTTON)
+        return self
 
     @allure.step("Ввод электронной почты")
     def enter_email(self, email):

@@ -1,10 +1,18 @@
 import allure
 
+from data import URL
 from pages.base_page import BasePage
 from locators import TestLocators
 
 
 class RegistrationPage(BasePage):
+
+    @allure.step("Открыть страницу регистрации")
+    def open(self):
+        self.open_url(URL.REGISTER_URL)
+        self.wait_for_page_to_load()
+        self.wait_for_element_visible(TestLocators.REG_BUTTON)
+        return self
 
     @allure.step("Ввод имени при регистрации")
     def enter_name(self, name):
@@ -24,7 +32,7 @@ class RegistrationPage(BasePage):
 
     @allure.step("Ожидание завершения регистрации")
     def wait_for_registration_success(self, register_url):
-        self.wait_for_url_to_differ(register_url)        
+        self.wait_for_url_to_differ(register_url)
 
     @allure.step("Регистрация пользователя")
     def register(self, name, email, password, register_url):
